@@ -3,8 +3,10 @@ package com.mraon.babyphone2;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -15,14 +17,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
 
     private WebView webView;
     private WebSettings webViewSetting;
     private String webUrlLocal = "http://3.230.157.235";
-    private String testURL = "www.google.com";
+    private String testURL = "https://m.naver.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +60,20 @@ public class MainActivity extends AppCompatActivity {
         webViewSetting = webView.getSettings();
         webViewSetting.setJavaScriptEnabled(true);
         webViewSetting.setLoadWithOverviewMode(true);
-        webView.setWebViewClient(new WebViewClient(){});
+        webView.setWebViewClient(new myWebClient());
 
         webView.loadUrl(testURL);
+    }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(keyCode== KeyEvent.KEYCODE_BACK){
+            if(webView.canGoBack()){
+                webView.goBack();
+                return false;
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 }
