@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "866125722595",
+    "firebase_url": "https://cs459-f1322.firebaseio.com",
+    "project_id": "cs459-f1322",
+    "storage_bucket": "cs459-f1322.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:866125722595:android:fe3525c5b09888b1b266d6",
+        "android_client_info": {
+          "package_name": "com.mraon.babyphone2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "866125722595-73c1ager4tqsu9qsqinsfdsdsncgrhlp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mraon.babyphone2",
+            "certificate_hash": "bee98785decd51a4ff4bd085a1fbc0d4a827c6a2"
+          }
+        },
+        {
+          "client_id": "866125722595-7cci9gbgjk9o3v9am7lf0q1to047arv4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNZjp18JqhUdaAK1rf8NFHTMOkl41SQx4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "866125722595-7cci9gbgjk9o3v9am7lf0q1to047arv4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name='BabyPhone2.0'
