@@ -14,7 +14,7 @@ public class myWebClient extends WebViewClient {
         Uri uri = Uri.parse(view.getUrl());
 
         /*
-        if(uri.getPath().contains("/test/page")){
+        if(uri.getPath().contains("/registIP")){
 
             Intent intent = new Intent(MainActivity.this, TestActivity.class); // 새창을 여는 액티비티나, 팝업일때 이용하면 용이합니다.
             intent.putExtra("url",view.getUrl());

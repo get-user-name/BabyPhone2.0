@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,10 +35,14 @@ public class MainActivity extends Activity {
     private String webUrlLocal = "http://3.230.157.235";
     private String testURL = "https://m.naver.com";
 
+    Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        intent = getIntent();
 
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -57,7 +62,13 @@ public class MainActivity extends Activity {
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
 
 
-                        GetCodeTask getCodeTask = new GetCodeTask(token);
+                        GetCodeTask getCodeTask =
+                                new GetCodeTask(
+                                        token,
+                                        intent.getExtras().getString("ip1"),
+                                        intent.getExtras().getString("ip2"),
+                                        intent.getExtras().getString("ip3"),
+                                        intent.getExtras().getString("ip4"));
                         getCodeTask.execute();
 
                     }
@@ -91,9 +102,17 @@ public class MainActivity extends Activity {
     {
 
         private String token;
+        private String ip1;
+        private String ip2;
+        private String ip3;
+        private String ip4;
 
-        public GetCodeTask(String _token){
+        public GetCodeTask(String _token, String _ip1, String _ip2, String _ip3, String _ip4){
             this.token = _token;
+            this.ip1 = _ip1;
+            this.ip2 = _ip2;
+            this.ip3 = _ip3;
+            this.ip4 = _ip4;
         }
 
         protected String doInBackground(Void... params) {
@@ -101,7 +120,7 @@ public class MainActivity extends Activity {
             String code = null;
 
             try{
-                URL url = new URL("http://3.230.157.235/storeToken?token="+token);
+                URL url = new URL(String.format("http://3.230.157.235/registIP?token=%s&ip1=%s&ip2=%s&ip3=%s&ip4=%s",token,ip1,ip2,ip3,ip4));
                 Log.e("URL", url.toString());
 
                 HttpURLConnection connection = (HttpURLConnection)url.openConnection();
