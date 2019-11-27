@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -33,13 +34,10 @@ public class MainActivity extends Activity {
     private String webUrlLocal = "http://3.230.157.235";
     private String testURL = "https://m.naver.com";
 
-    private String code;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -58,15 +56,12 @@ public class MainActivity extends Activity {
                         Log.d(TAG, msg);
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
 
-                        code = getCode(token);
 
+                        GetCodeTask getCodeTask = new GetCodeTask(token);
+                        getCodeTask.execute();
 
                     }
                 });
-
-
-        TextView textView = findViewById(R.id.code);
-        textView.setText("CODE: "+code);
 
         //-------------------------------------------------------------------
 
@@ -77,7 +72,7 @@ public class MainActivity extends Activity {
         webViewSetting.setLoadWithOverviewMode(true);
         webView.setWebViewClient(new myWebClient());
 
-        webView.loadUrl(testURL);
+        webView.loadUrl(webUrlLocal);
     }
 
     @Override
@@ -92,31 +87,53 @@ public class MainActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
-    String getCode(String token){
+    class GetCodeTask extends AsyncTask<Void,Void,String>
+    {
 
-        String code = null;
-        try{
-            URL url = new URL(webUrlLocal+"/storeToken?token="+token);
-            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-            connection.setRequestMethod("GET");
-            InputStream inputStream = connection.getInputStream();
+        private String token;
 
-            StringBuilder builder = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-            String line;
-            while ((line = reader.readLine())!=null){
-                builder.append(line);
-            }
-
-            code = builder.toString();
-
-
-        } catch (Exception e) {
-            Log.e("REST_API", "GET method failed: " + e.getMessage());
-            e.printStackTrace();
+        public GetCodeTask(String _token){
+            this.token = _token;
         }
 
-        return code;
+        protected String doInBackground(Void... params) {
 
+            String code = null;
+
+            try{
+                URL url = new URL("http://3.230.157.235/storeToken?token="+token);
+                Log.e("URL", url.toString());
+
+                HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+
+                InputStream inputStream = connection.getInputStream();
+
+                StringBuilder builder = new StringBuilder();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+                String line;
+                while ((line = reader.readLine())!=null){
+                    builder.append(line);
+                }
+
+                code = builder.toString();
+
+
+            } catch (Exception e) {
+                Log.e("REST_API", "GET method failed: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+            return code;
+        }
+
+
+        @Override
+        protected void onPostExecute(String code) {
+            // dismiss progress dialog and update ui
+            TextView textView = findViewById(R.id.code);
+            textView.setText(code);
+        }
     }
+
+
 }
